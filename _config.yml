@@ -1,0 +1,52 @@
+# Site settings
+title: "PatchNote"
+description: "기술 학습 기록 모음"
+baseurl: ""
+url: "https://S00ahKim.github.io"
+
+# Personal info
+author:
+  name: "김수아"
+  email: "rlatndk0206@naver.com"
+  github: "S00ahKim"
+  linkedin: "sooah-kim"
+  bio: "소프트웨어 엔지니어"
+  interests: "최근에는 코틀린, 리액티브 프로그래밍에 관심이 많습니다."
+  avatar: "/assets/images/profile.png"
+
+# Build settings
+markdown: kramdown
+highlighter: rouge
+plugins:
+  - jekyll-feed
+
+# Collections
+collections:
+  posts:
+    output: true
+    permalink: /:year/:month/:day/:title/
+
+# Navigation
+navigation:
+  - title: "모아보기"
+    url: "/"
+  - title: "프로필"
+    url: "/profile/"
+
+# Pagination
+paginate: 10
+
+# Defaults
+defaults:
+  - scope:
+      path: ""
+      type: "posts"
+    values:
+      layout: "post"
+      comments: true
+
+# Exclude files
+exclude:
+  - README.md
+  - Gemfile
+  - Gemfile.lock 
