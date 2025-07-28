@@ -7,11 +7,27 @@ title: 글 목록
     <div class="container">
         <header class="page-header">
             <h1>최근 글</h1>
+            <!-- 간단한 카테고리 목록 -->
+            {% if site.categories.size > 0 %}
+            <div class="simple-categories">
+                <button class="simple-category active" data-category="all">
+                    <span class="category-name">전체</span>
+                    <span class="category-count">({{ site.posts.size }})</span>
+                </button>
+                {% assign sorted_categories = site.categories | sort %}
+                {% for category in sorted_categories %}
+                    <button class="simple-category" data-category="{{ category[0] | downcase | replace: ' ', '-' }}">
+                        <span class="category-name">{{ category[0] }}</span>
+                        <span class="category-count">({{ category[1].size }})</span>
+                    </button>
+                {% endfor %}
+            </div>
+            {% endif %}
         </header>
         
         <div class="posts-list">
             {% for post in site.posts %}
-                <article class="post-preview">
+                <article class="post-preview" data-categories="{{ post.categories | join: ' ' | downcase }}">
                     <h2 class="post-title">
                         <a href="{{ post.url | relative_url }}">{{ post.title }}</a>
                     </h2>

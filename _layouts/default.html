@@ -16,10 +16,92 @@
         {{ content }}
     </main>
     
-    <footer class="footer">
+        <footer class="footer">
         <div class="container">
             <p>&copy; {{ site.time | date: '%Y' }} {{ site.author.name }}. All rights reserved.</p>
         </div>
     </footer>
+    
+    <script>
+        // 카테고리 필터링 기능
+        document.addEventListener('DOMContentLoaded', function() {
+            const categoryButtons = document.querySelectorAll('.simple-category');
+            const postPreviews = document.querySelectorAll('.post-preview');
+            const postsContainer = document.querySelector('.posts-list');
+            
+
+            
+            categoryButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    // 활성 카테고리 변경
+                    categoryButtons.forEach(btn => btn.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    const selectedCategory = this.getAttribute('data-category');
+                    let visibleCount = 0;
+                    
+                    // 글 필터링
+                    postPreviews.forEach(post => {
+                        const postCategories = post.getAttribute('data-categories') || '';
+                        
+                        if (selectedCategory === 'all') {
+                            post.style.display = 'block';
+                            visibleCount++;
+                        } else {
+                            // 정확한 매칭을 위해 공백으로 분리해서 확인
+                            const categories = postCategories.split(' ');
+                            if (categories.includes(selectedCategory)) {
+                                post.style.display = 'block';
+                                visibleCount++;
+                            } else {
+                                post.style.display = 'none';
+                            }
+                        }
+                    });
+                    
+                    // "글이 없습니다" 메시지 처리
+                    let noPostsMsg = document.querySelector('.no-posts');
+                    const originalNoPostsMsg = document.querySelector('.no-posts[data-original="true"]');
+                    
+                    if (visibleCount === 0) {
+                        if (!noPostsMsg || originalNoPostsMsg) {
+                            // 기존 메시지 숨기기
+                            if (originalNoPostsMsg) {
+                                originalNoPostsMsg.style.display = 'none';
+                            }
+                            
+                            // 새 메시지 생성 또는 표시
+                            if (!noPostsMsg || originalNoPostsMsg) {
+                                const newNoPostsMsg = document.createElement('div');
+                                newNoPostsMsg.className = 'no-posts';
+                                newNoPostsMsg.innerHTML = '<p>해당 카테고리에 글이 없습니다.</p>';
+                                postsContainer.appendChild(newNoPostsMsg);
+                            } else {
+                                noPostsMsg.innerHTML = '<p>해당 카테고리에 글이 없습니다.</p>';
+                                noPostsMsg.style.display = 'block';
+                            }
+                        }
+                    } else {
+                        // 필터링 메시지 숨기기
+                        const filterMsg = document.querySelector('.no-posts:not([data-original="true"])');
+                        if (filterMsg) {
+                            filterMsg.style.display = 'none';
+                        }
+                        
+                        // 원본 메시지 복원 (모든 글이 숨겨진 경우)
+                        if (originalNoPostsMsg && postPreviews.length === 0) {
+                            originalNoPostsMsg.style.display = 'block';
+                        }
+                    }
+                });
+            });
+            
+            // 원본 "글이 없습니다" 메시지에 마크 추가
+            const originalNoPostsMsg = document.querySelector('.no-posts');
+            if (originalNoPostsMsg) {
+                originalNoPostsMsg.setAttribute('data-original', 'true');
+            }
+        });
+    </script>
 </body>
 </html> 
